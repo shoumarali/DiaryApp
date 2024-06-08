@@ -1,6 +1,5 @@
 package com.alishoumar.diaryapp.presentation.components
 
-import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -8,10 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
@@ -33,7 +29,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.alishoumar.diaryapp.R
-import com.alishoumar.diaryapp.ui.theme.surfaceDark
 
 @Composable
 fun GoogleButton(
@@ -52,7 +47,7 @@ fun GoogleButton(
     var buttonText by remember { mutableStateOf(primaryText)}
 
     LaunchedEffect(key1 = loadingState) {
-        buttonText = if(!loadingState) secondaryText else primaryText
+        buttonText = if(loadingState) secondaryText else primaryText
     }
 
     Surface(
@@ -77,11 +72,11 @@ fun GoogleButton(
 
             if(loadingState){
                 Spacer(modifier = Modifier.width(16.dp))
-                CircularProgressIndicator(
-                    modifier = Modifier.size(16.dp),
-                    strokeWidth = 2.dp,
-                    color = progressIndicatorColor
-                )
+//                CircularProgressIndicator(
+//                    modifier = Modifier.size(16.dp),
+//                    strokeWidth = 2.dp,
+//                    color = progressIndicatorColor
+//                )
             }
         }
     }

@@ -25,6 +25,10 @@ class AuthenticationViewModel : ViewModel() {
         loadingState.value = loading
     }
 
+    fun setAuthenticated(isAuth: Boolean){
+        authenticated.value = isAuth
+    }
+
     fun signInWithMongoAtlas(
         tokenId: String,
         onSuccess: () -> Unit,

@@ -280,11 +280,22 @@ fun DiaryAppTheme(
             window.statusBarColor = colorScheme.primary.toArgb()
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
         }
-
-        SideEffect {
-
-        }
     }
+
+    SideEffect {
+        val window = (view.context as Activity).window
+        window.statusBarColor= Color.Transparent.toArgb()
+        window.navigationBarColor = Color.Transparent.toArgb()
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
+            window.isNavigationBarContrastEnforced = false
+        }
+
+        val windowsInsetController = WindowCompat.getInsetsController(window,view)
+        windowsInsetController.isAppearanceLightStatusBars = !darkTheme
+        windowsInsetController.isAppearanceLightNavigationBars =!darkTheme
+    }
+
 
     MaterialTheme(
         colorScheme = colorScheme,
