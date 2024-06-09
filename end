@@ -1,0 +1,23 @@
+[33mcommit 433065426f4f2d1b570a866f6c2d5a489fa40691[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m
+Author: shoumarali <alialakbarshoumar610@gmail.com>
+Date:   Sat Jun 8 19:14:22 2024 +0300
+
+    Added Homescreen topbar, navigaton drawer, alerDialogComponent, SignOut Feature and set up homescreen navigation
+
+[33mcommit cc9fe94a6cb7a3da5b111850b1fda578a46f777c[m
+Author: shoumarali <alialakbarshoumar610@gmial.com>
+Date:   Fri Jun 7 17:43:47 2024 +0300
+
+    added authentication logic
+
+[33mcommit 168f4d9ae682c723ead6ea13653c6dae7bcf74f5[m
+Author: shoumarali <alialakbarshoumar610@gmial.com>
+Date:   Fri Jun 7 16:16:51 2024 +0300
+
+    Added Authentication Screen
+
+[33mcommit 2760608076b97c1248f1c98567ec6e38770a5b5c[m
+Author: shoumarali <alialakbarshoumar610@gmail.com>
+Date:   Thu Jun 6 07:46:47 2024 +0300
+
+    first commit
