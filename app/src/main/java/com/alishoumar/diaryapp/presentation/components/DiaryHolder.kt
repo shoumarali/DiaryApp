@@ -1,6 +1,10 @@
 package com.alishoumar.diaryapp.presentation.components
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -91,7 +95,14 @@ fun DiaryHolder(diary: Diary, onClick:(String) ->Unit) {
                         galleryOpened = !galleryOpened
                     })
                 }
-                AnimatedVisibility(visible = galleryOpened) {
+                AnimatedVisibility(visible = galleryOpened,
+                    enter = fadeIn() + expandVertically(
+                        animationSpec = spring(
+                            dampingRatio = Spring.DampingRatioMediumBouncy,
+                            stiffness = Spring.StiffnessLow
+                        )
+                    )
+                ) {
                     Column (
                         modifier = Modifier.padding(all = 14.dp)
                     ){
@@ -154,9 +165,19 @@ fun ShowGalleryButton(
 fun PreviewDiaryHolder(){
     DiaryHolder(diary = Diary().apply {
         title="What is Lorem Ipsum?"
-        description="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum"
-
+//        description="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum"
+        description ="ALi "
         mood = Mood.Suspicious.name
+        images= realmListOf("","")
+    }, onClick = {})
+}
+@Composable
+@Preview
+fun PreviewDiaryHolder2(){
+    DiaryHolder(diary = Diary().apply {
+        title="What is Lorem Ipsum?"
+        description="Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum"
+        mood = Mood.Angry.name
         images= realmListOf("","")
     }, onClick = {})
 }

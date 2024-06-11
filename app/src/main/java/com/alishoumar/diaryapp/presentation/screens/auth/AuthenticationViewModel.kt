@@ -1,5 +1,6 @@
 package com.alishoumar.diaryapp.presentation.screens.auth
 
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -50,6 +51,33 @@ class AuthenticationViewModel : ViewModel() {
                         onError(Exception("User is not logged in"))
                     }
 
+                }
+            }catch (e: Exception){
+                withContext(Dispatchers.Main){
+                    Log.d("Auth","$e")
+                    onError(e)
+                }
+            }
+        }
+    }
+
+    fun signInWithMongoAnonymous(
+        onSuccess: () -> Unit,
+        onError: (Exception) -> Unit
+    ){
+        viewModelScope.launch {
+            try {
+                val result = withContext(Dispatchers.IO) {
+                    App.create(APP_ID).login(credentials = Credentials.anonymous()).loggedIn
+                }
+                withContext(Dispatchers.Main){
+                    if(result){
+                        onSuccess()
+                        delay(600 )
+                        authenticated.value=true
+                    } else {
+                        onError(Exception("User is not logged in"))
+                    }
                 }
             }catch (e: Exception){
                 withContext(Dispatchers.Main){

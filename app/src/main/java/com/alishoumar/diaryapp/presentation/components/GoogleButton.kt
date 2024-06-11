@@ -7,7 +7,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
@@ -73,7 +75,7 @@ fun GoogleButton(
             if(loadingState){
                 Spacer(modifier = Modifier.width(16.dp))
 //                CircularProgressIndicator(
-//                    modifier = Modifier.size(16.dp),
+//                            modifier = Modifier.size(16.dp),
 //                    strokeWidth = 2.dp,
 //                    color = progressIndicatorColor
 //                )
