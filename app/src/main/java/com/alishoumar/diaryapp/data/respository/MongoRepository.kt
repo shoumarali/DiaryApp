@@ -10,4 +10,8 @@ interface MongoRepository {
     fun configureTheRealm()
 
     fun getAllDiaries(): Flow<Diaries>
+
+    fun getSelectedDiary(diaryId: io.realm.kotlin.types.ObjectId) :Flow<RequestState<Diary>>
+
+    suspend fun insertDiary(diary:Diary) : RequestState<Diary>
 }

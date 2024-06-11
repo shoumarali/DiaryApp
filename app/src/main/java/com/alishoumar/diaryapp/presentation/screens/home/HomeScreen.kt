@@ -43,14 +43,15 @@ import com.alishoumar.diaryapp.util.RequestState
 
 
 @OptIn(ExperimentalMaterial3Api::class)
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "SuspiciousIndentation")
 @Composable
 fun HomeScreen(
     diaries: Diaries,
     drawerState: DrawerState,
     onMenuClick: () -> Unit,
     onSignOutClicked: () -> Unit,
-    navigateToWriteScreen:() -> Unit
+    navigateToWriteScreen:() -> Unit,
+    navigateToWriteWithArgs: (String) -> Unit
 ){
     var padding by remember { mutableStateOf(PaddingValues()) }
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
@@ -78,7 +79,11 @@ fun HomeScreen(
                padding = paddingValues
                    when(diaries){
                        is RequestState.Success ->{
-                           HomeContent(paddingValues = paddingValues,diaryNotes = diaries.data, onClick = {})
+                           HomeContent(
+                               paddingValues = paddingValues,
+                               diaryNotes = diaries.data,
+                               onClick = navigateToWriteWithArgs
+                           )
                        }
                        is RequestState.Error ->{
                            EmptyPage(title = "Error" , subTitle = "${diaries.error.message}")

@@ -35,7 +35,7 @@ import java.time.LocalDate
 fun HomeContent(
     paddingValues: PaddingValues,
     diaryNotes: Map<LocalDate,List<Diary>>,
-    onClick: () -> Unit
+    onClick: (String) -> Unit
 ){
     if(diaryNotes.isNotEmpty()){
         LazyColumn (
@@ -53,9 +53,7 @@ fun HomeContent(
                 items( items = diaries , key = {
                     it._id.toString()
                 }){
-                    DiaryHolder(diary = it) {
-                        onClick()
-                    }
+                    DiaryHolder(diary = it, onClick = onClick)
                 }
             }
         }
