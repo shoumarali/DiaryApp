@@ -1,6 +1,8 @@
 package com.alishoumar.diaryapp.presentation.screens.write
 
 import android.annotation.SuppressLint
+import android.net.Uri
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -9,9 +11,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.alishoumar.diaryapp.data.respository.MongoDB
 import com.alishoumar.diaryapp.model.Diary
+import com.alishoumar.diaryapp.model.GalleryImage
+import com.alishoumar.diaryapp.model.GalleryState
 import com.alishoumar.diaryapp.model.Mood
 import com.alishoumar.diaryapp.util.Constants.WRITE_SCREEN_ARGUMENT_KEY
 import com.alishoumar.diaryapp.model.RequestState
+import com.alishoumar.diaryapp.model.rememberGalleryState
 import com.alishoumar.diaryapp.util.toRealmInstant
 import io.realm.kotlin.types.ObjectId
 import io.realm.kotlin.types.RealmInstant
@@ -24,6 +29,8 @@ import java.time.ZonedDateTime
 class WriteViewModel (
     private val savedStateHandle: SavedStateHandle
 ) :ViewModel() {
+
+    val galleryState = GalleryState()
 
      var uiState by mutableStateOf(UiState())
          private set
@@ -155,6 +162,14 @@ class WriteViewModel (
                 }
             }
         }
+    }
+
+    fun addImage(image:Uri, imageType:String){
+        val remoteImagePath = "images/userId/${image.lastPathSegment}-${System.currentTimeMillis()}.$imageType"
+        Log.d("tag", "addImage: $remoteImagePath")
+        galleryState.addImages(
+            GalleryImage(image = image,remoteImagePath)
+        )
     }
 }
 

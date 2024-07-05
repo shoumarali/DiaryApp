@@ -1,10 +1,12 @@
 package com.alishoumar.diaryapp.presentation.screens.write
 
 import android.annotation.SuppressLint
+import android.net.Uri
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import com.alishoumar.diaryapp.model.Diary
+import com.alishoumar.diaryapp.model.GalleryState
 import com.alishoumar.diaryapp.model.Mood
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.PagerState
@@ -15,6 +17,8 @@ import java.time.ZonedDateTime
 @Composable
 fun WriteScreen(
     uiState: UiState,
+    galleryState:GalleryState,
+    onImageSelect:(Uri) -> Unit,
     pagerState: PagerState,
     moodName: () -> String,
     onTitleChange:(String) -> Unit,
@@ -42,6 +46,8 @@ fun WriteScreen(
         content = {
             WriteContent(
                 uiState=uiState,
+                onImageSelect = onImageSelect,
+                galleryState = galleryState,
                 pagerState = pagerState,
                 title = uiState.title,
                 onTitleChange = onTitleChange,

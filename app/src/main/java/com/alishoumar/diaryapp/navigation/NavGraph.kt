@@ -1,6 +1,7 @@
 package com.alishoumar.diaryapp.navigation
 
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.rememberDrawerState
@@ -21,6 +22,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.alishoumar.diaryapp.data.respository.MongoDB
+import com.alishoumar.diaryapp.model.GalleryImage
 import com.alishoumar.diaryapp.model.Mood
 import com.alishoumar.diaryapp.presentation.components.DisplayAlertDialog
 import com.alishoumar.diaryapp.presentation.screens.auth.AuthenticationScreen
@@ -32,6 +34,7 @@ import com.alishoumar.diaryapp.presentation.screens.write.WriteViewModel
 import com.alishoumar.diaryapp.util.Constants.APP_ID
 import com.alishoumar.diaryapp.util.Constants.WRITE_SCREEN_ARGUMENT_KEY
 import com.alishoumar.diaryapp.model.RequestState
+import com.alishoumar.diaryapp.model.rememberGalleryState
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.rememberPagerState
 import com.stevdzasan.messagebar.rememberMessageBarState
@@ -202,11 +205,18 @@ fun NavGraphBuilder.writeRoute(onBackPress:() -> Unit){
         val uiState = viewModel.uiState
         val pagerState = rememberPagerState()
         val context = LocalContext.current
-        val pageNumber by remember { derivedStateOf{pagerState.currentPage} }
+        val pageNumber by remember { derivedStateOf{pagerState.currentPage}}
 
+        val  galleryState = viewModel.galleryState
 
         WriteScreen (
             uiState = uiState,
+            galleryState = galleryState,
+            onImageSelect = {
+                val type = context.contentResolver.getType(it)?.split("/")?.last() ?: "jpg"
+                Log.d("tag", "writeRoute: $it")
+                            viewModel.addImage(image = it, imageType = "jpeg")
+            },
             pagerState = pagerState,
             moodName = { Mood.entries[pageNumber].name},
             onDeleteConfirmed = {viewModel.deleteDiary(
