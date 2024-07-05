@@ -1,8 +1,9 @@
 package com.alishoumar.diaryapp.data.respository
 
+import android.annotation.SuppressLint
 import com.alishoumar.diaryapp.model.Diary
 import com.alishoumar.diaryapp.util.Constants.APP_ID
-import com.alishoumar.diaryapp.util.RequestState
+import com.alishoumar.diaryapp.model.RequestState
 import com.alishoumar.diaryapp.util.toInstant
 import io.realm.kotlin.Realm
 import io.realm.kotlin.ext.query
@@ -10,10 +11,10 @@ import io.realm.kotlin.log.LogLevel
 import io.realm.kotlin.mongodb.App
 import io.realm.kotlin.mongodb.sync.SyncConfiguration
 import io.realm.kotlin.query.Sort
+import io.realm.kotlin.types.ObjectId
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
-import org.mongodb.kbson.ObjectId
 import java.time.ZoneId
 
 object MongoDB :MongoRepository{
@@ -93,6 +94,51 @@ object MongoDB :MongoRepository{
             }
 
         }else {
+            RequestState.Error(UserNotAuthenticatedException())
+        }
+    }
+
+    override suspend fun updateDiary(diary: Diary): RequestState<Diary> {
+        return if(user != null){
+            realm.write {
+                val queryDiary = query<Diary>(query = "_id == $0", diary._id).first().find()
+                if(queryDiary != null){
+                    queryDiary.title = diary.title
+                    queryDiary.description = diary.description
+                    queryDiary.mood = diary.mood
+                    queryDiary.images = diary.images
+                    queryDiary.date = diary.date
+                    RequestState.Success(data = queryDiary)
+                }else{
+                    RequestState.Error(error = Exception("Query Diary does not exist"))
+                }
+            }
+        }else {
+            RequestState.Error(UserNotAuthenticatedException())
+        }
+    }
+
+    @SuppressLint("SuspiciousIndentation")
+    override suspend fun deleteDiary(diaryId: ObjectId): RequestState<Diary> {
+        return if(user != null){
+            realm.write {
+                val diary = query<Diary>(query="_id == $0 AND ownerId == $1", diaryId, user.identity)
+                .first()
+                .find()
+
+                if(diary != null) {
+                    try {
+
+                        delete(diary)
+                        RequestState.Success(diary)
+                    } catch (e: Exception) {
+                        RequestState.Error(error = e)
+                    }
+                }else{
+                    RequestState.Error(error = Exception("Diary doesn't exist"))
+                }
+            }
+        }else{
             RequestState.Error(UserNotAuthenticatedException())
         }
     }

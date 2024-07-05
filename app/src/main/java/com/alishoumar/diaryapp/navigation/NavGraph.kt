@@ -1,6 +1,7 @@
 package com.alishoumar.diaryapp.navigation
 
 
+import android.widget.Toast
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
@@ -11,6 +12,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -29,7 +31,7 @@ import com.alishoumar.diaryapp.presentation.screens.write.WriteScreen
 import com.alishoumar.diaryapp.presentation.screens.write.WriteViewModel
 import com.alishoumar.diaryapp.util.Constants.APP_ID
 import com.alishoumar.diaryapp.util.Constants.WRITE_SCREEN_ARGUMENT_KEY
-import com.alishoumar.diaryapp.util.RequestState
+import com.alishoumar.diaryapp.model.RequestState
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.rememberPagerState
 import com.stevdzasan.messagebar.rememberMessageBarState
@@ -57,15 +59,15 @@ fun SetUpNavGraph(
             onDataLoaded = onDataLoaded)
         homeRoute(navigateTorWriteScreen = {
             navController.navigate(Screen.Write.route)
-        }, navigateToAuthScreen = {
+        },
+            navigateToAuthScreen = {
             navController.popBackStack()
             navController.navigate(Screen.Authentication.route)
-        },
-            onDataLoaded = onDataLoaded
-        , navigateToWriteWithArgs = {
-            navController.navigate(Screen.Write.passDiaryId(diaryId = it))
-            }
-        )
+
+        }, onDataLoaded = onDataLoaded
+            , navigateToWriteWithArgs = {
+                navController.navigate(Screen.Write.passDiaryId(diaryId = it))
+        })
         writeRoute(onBackPress = {
             navController.popBackStack()
         })
@@ -199,22 +201,37 @@ fun NavGraphBuilder.writeRoute(onBackPress:() -> Unit){
         val viewModel : WriteViewModel = viewModel()
         val uiState = viewModel.uiState
         val pagerState = rememberPagerState()
+        val context = LocalContext.current
         val pageNumber by remember { derivedStateOf{pagerState.currentPage} }
 
-        
+
         WriteScreen (
             uiState = uiState,
             pagerState = pagerState,
             moodName = { Mood.entries[pageNumber].name},
-            onDeleteConfirmed = {},
+            onDeleteConfirmed = {viewModel.deleteDiary(
+                onSuccess = {
+                    Toast.makeText(context,"Deleted",Toast.LENGTH_SHORT).show()
+                    onBackPress()
+                },
+                onError = {message ->
+                    Toast.makeText(context,message,Toast.LENGTH_SHORT).show()
+                }
+            )},
+            onDateTimeUpdated = {
+                viewModel.updateDateAndTime(zoneDateTime = it)
+            },
             onBackPress = onBackPress,
             onTitleChange = {viewModel.setTitle(title = it)},
             onDescriptionChange = { viewModel.setDescription(description = it) },
             onSaveClick = {
-                viewModel.insertDiary(
+                viewModel.upsertDiary(
                     diary = it.apply { mood = Mood.entries[pageNumber].name },
                     onSuccess = { onBackPress() },
-                    onError = {}
+                    onError = {message ->
+                        Toast.makeText(
+                            context,message,Toast.LENGTH_SHORT).show()
+                    }
                 )
             }
         )

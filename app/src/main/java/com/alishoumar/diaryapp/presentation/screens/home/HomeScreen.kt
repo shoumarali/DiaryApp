@@ -23,7 +23,6 @@ import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -39,7 +38,7 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import com.alishoumar.diaryapp.R
 import com.alishoumar.diaryapp.data.respository.Diaries
-import com.alishoumar.diaryapp.util.RequestState
+import com.alishoumar.diaryapp.model.RequestState
 
 
 @OptIn(ExperimentalMaterial3Api::class)

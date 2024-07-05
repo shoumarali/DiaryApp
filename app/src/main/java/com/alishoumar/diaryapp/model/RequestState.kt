@@ -1,4 +1,4 @@
-package com.alishoumar.diaryapp.util
+package com.alishoumar.diaryapp.model
 
 sealed class RequestState<out T> {
 
